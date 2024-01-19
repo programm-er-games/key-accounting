@@ -1,35 +1,39 @@
 <?php
-$main_conn = new SQLite3("C:\\Users\\User\\Documents\\GitHub\\key-accounting\\KA.db");
+$datetime = new DateTime(timezone: new DateTimeZone("+0300"));
 class Db {
     private $db;
-    private $arguments;
+    private $tables;
 
-    function start(string $table, ...$args) {
-        for ($i = 0; $i < count($args); $i++) {
-            $this->arguments[$i] = $args[$i];
+    function start(array $fill) {
+        // for ($i = 0; $i < count($args); $i++) {
+        //     $this->tables[$i] = $args[$i];
+        // }
+        // // var_dump($this->tables);
+        // $sql = "CREATE TABLE IF NOT EXISTS " . $table . " (" . join(", ", $this->tables) . ")";
+        // for ($i = 0; $i < count($args); $i++) {
+        //     $temp = explode(" ", $this->tables[$i]);
+        //     $this->tables[$i] = $temp[0];
+        // }
+        // // echo $sql."\n";
+        // // var_dump($this->tables);
+        // $this->db->exec($sql);
+        foreach($fill as $table => $row) {
+            $this->tables[$table] = $row;
         }
-        // var_dump($this->arguments);
-        $sql = "CREATE TABLE IF NOT EXISTS " . $table . " (" . join(", ", $this->arguments) . ")";
-        for ($i = 0; $i < count($args); $i++) {
-            $temp = explode(" ", $this->arguments[$i]);
-            $this->arguments[$i] = $temp[0];
-        }
-        // echo $sql."\n";
-        // var_dump($this->arguments);
-        $this->db->exec($sql);
     }
     function insert(string $table, array $data) {
+        global $datetime;
         $sql = "INSERT INTO " . $table . " VALUES (";
-        foreach ($this->arguments as $value) {
+        foreach ($this->tables as $value) {
             $sql .= ":" . $value . ", ";
         }
         $sql = substr($sql, 0, -2);
-        $sql .= ")";
         // echo $sql;
         $sql = $this->db->prepare($sql);
-        // var_dump($data, $this->arguments);
+        // var_dump($data, $this->tables);
+        array_push($data, $datetime->format("D, d M Y H:i:s"));
         for ($i = 0; $i < count($data); $i++) {
-            $sql->bindParam(":" . $this->arguments[$i], $data[$i]);
+            $sql->bindParam(":" . $this->tables[$i], $data[$i]);
         }
         $sql->execute();
     }
@@ -78,7 +82,8 @@ class Db {
         foreach ($cond as $key => $value) {
             $sql->bindValue(":" . $key, $value);
         }
-        var_dump($sql->execute()->fetchArray(SQLITE3_ASSOC));
+        // var_dump($sql->execute()->fetchArray(SQLITE3_ASSOC));
+        return $sql->execute()->fetchArray(SQLITE3_ASSOC);
     }
     function __construct(string $path) { 
         $this->db = new SQLite3($path);
@@ -87,4 +92,3 @@ class Db {
         $this->db->close();
     }
 }
-?>
