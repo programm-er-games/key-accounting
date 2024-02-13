@@ -35,6 +35,11 @@ body{
     margin: 20px 0;
 }
 
+.container .sign_in, .sign_up{
+    color: red;
+    font-size: 2em;
+}
+
 .container span{
     font-size: 12px;
 }

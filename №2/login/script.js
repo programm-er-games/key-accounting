@@ -4,48 +4,44 @@ const loginBtn = document.getElementById('login');
 
 registerBtn.addEventListener('click', () => {
     container.classList.add("active");
+    document.title = "Register";
 });
 
 loginBtn.addEventListener('click', () => {
     container.classList.remove("active");
+    document.title = "Login";
 });
 
 function sign_up() {
-    let form = document.getElementById("sign_up");
-
-    let name = form.elements.name.value;
-    let email = form.elements.email.value;
-    let password = form.elements.password.value;
-
-    $.ajax({
-        type: 'post',
-        url: 'http://event-register/event_register_2/login/sign_up.php',
-        data: {
-            sign_up_name: name, 
-            sign_up_email: email, 
-            sign_up_password: password
-        },
-        success: function(data) {
-            console.log(data);
+    let xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("sign_up_message").textContent = this.responseText;
+            console.log(this.responseText);
         }
-    });
+    };
+    xmlhttp.open("GET", "sign_up.php");
+    xmlhttp.send();
 }
 
 function sign_in() {
-    let form = document.getElementById("sign_in");
-
-    let email = form.elements.email.value;
-    let password = form.elements.password.value;
-
-    $.ajax({
-        type: 'post',
-        url: 'http://event-register/event_register_2/login/sign_in.php',
-        data: {
-            sign_in_email: email, 
-            sign_in_password: password
-        },
-        success: function(data) {
-            console.log(data);
-        }
-    });
+    // let xmlhttp = new XMLHttpRequest();
+    // xmlhttp.onreadystatechange = function () {
+    //     if (this.readyState == 4 && this.status == 200) {
+    //         document.getElementById("sign_in_message").textContent = this.response;
+    //         alert(this.response);
+    //         console.log(this.responseText);
+    //     }
+    // };
+    // xmlhttp.open("GET", "sign_in.php");
+    // xmlhttp.send();
+    function getCookie(name) {
+        let matches = document.cookie.match(new RegExp(
+          "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+        ));
+        return matches ? decodeURIComponent(matches[1]) : undefined;
+    }
+    let temp = getCookie("sign_in_res");
+    alert(document.getElementById("sign_in_message"));
+    document.getElementById("sign_in_message").textContent = temp;
 }

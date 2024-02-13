@@ -21,7 +21,7 @@
    
     <div class="heder">
       <h3>Calls </h3>
-      <div class="list" onclick="goToPage('/№2/admin/first_page/index.html')">
+      <div class="list" onclick="goToPage('../first_page/index.html')">
       <h4>вернуться</h4>
       </div>
     </div>
@@ -39,7 +39,14 @@
       </div>
     </div>
     
-   
+    <div class="popup-overlay" id="popupOverlay" onclick="closePopup()">
+      <div class="popup" id="popup">
+        <img src="images/credit-card.gif">
+        <h3 id="popupTitle"></h3>
+        <p id="popupPhoneNumber"></p>
+        <button onclick="closePopup()">позвонить</button>
+      </div>
+    </div>
 
 
     

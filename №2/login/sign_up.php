@@ -1,11 +1,20 @@
 <?php
     require "../db.php";
-    $datetime = new DateTime(timezone: new DateTimeZone("+0300"));
-    $main_conn = new Db("C:\\Users\\User\\Documents\\GitHub\\key-accounting\\KA.db");
-    $main_conn->start("records", "name TEXT NOT NULL", "surname TEXT NOT NULL", "datetime TEXT");
+    $main_conn = new Db("C:\\Windows.old\\Users\\User\\Documents\\GitHub\\key-accounting\\KA.db");
+    $main_conn->start(["student_records" => ["name" => "TEXT NOT NULL", "surname" => "TEXT NOT NULL", "datetime" => "TEXT"],
+    "security" => ["name" => "TEXT NOT NULL", "surname" => "TEXT", "email" => "TEXT NOT NULL UNIQUE", "password" => "TEXT NOT NULL UNIQUE"]]);
 
-    $name = htmlspecialchars($_POST['sign_up_name']);
-    $email = htmlspecialchars($_POST['sign_up_email']);
-    $password = htmlspecialchars($_POST['sign_up_password']);
+    $name = addslashes(trim(htmlspecialchars($_POST['name'])));
+    $surname = addslashes(trim(htmlspecialchars($_POST['surname'])));
+    $email = addslashes(trim(htmlspecialchars($_POST['email'])));
+    $password = addslashes(trim(htmlspecialchars($_POST['password'])));
 
-    $main_conn->insert("records", array("Alex", "Popov", $datetime->format("D, d M Y H:i:s")));
+    $is_exist = $main_conn->get("security", ["name" => $name, "surname" => $surname, "email" => $email, "password" => $password]);
+    if ($is_exist === false) {
+        $main_conn->insert("security", [$name, $surname, $email, $password]);
+        echo "Вы успешно зарегистрировались!";
+    }
+    else {
+        echo "Учётная запись с этими данными уже существует. Не хотите ли вы зарегистрироваться?";
+    }
+?>
