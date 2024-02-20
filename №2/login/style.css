@@ -37,7 +37,7 @@ body{
 
 .container .sign_in, .sign_up{
     color: red;
-    font-size: 2em;
+    font-size: 12px;
 }
 
 .container span{

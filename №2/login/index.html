@@ -43,7 +43,7 @@
                 <input type="email" placeholder="Email" name="email">
                 <input type="password" placeholder="Password" name="password">
                 <p class="sign_in" id="sign_in_message"></p>
-                <a href="forgot.html">Forget Your Password?</a>
+                <a href="forgot/forgot.html">Forget Your Password?</a>
                 <button>Sign In</button>
             </form>
         </div>
@@ -72,7 +72,12 @@
         let in_mes = getCookie("sign_in_res");
         let up_mes = getCookie("sign_up_res");
         document.getElementById("sign_in_message").textContent = in_mes === undefined ? "None" : in_mes;
-        // document.getElementById("sign_up_message").textContent = up_mes === undefined ? "None" : up_mes;
+        document.getElementById("sign_up_message").textContent = up_mes === undefined ? "None" : up_mes;
+        // console.log(getCookie("step"));
+        if (getCookie("step") !== undefined) {
+            document.cookie = "step=1; Max-Age=0";
+            location.reload();
+        }
     </script>
     <script src="script.js"></script>
 </body>

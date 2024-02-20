@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <title>Password recover</title>
+</head>
+
+<body>
+    <div class="container" id="container">
+        <div class="form-container" id="step1">
+            <form action="forgot.php" method="post">
+                <h1>Recover</h1>
+                <p>Use your email to recover your password. We will send verification code on your email</p>
+                <input type="text" placeholder="Email" name="recover_email">
+                <button onclick="step(2)">Send code</button>
+            </form>
+        </div>
+        <div class="form-container" id="step2">
+            <form action="forgot.php" method="post">
+                <h1>Recover</h1>
+                <p>Enter code which we sent on your email:</p>
+                <input type="text" placeholder="Code" name="check_code">
+                <button onclick="step(3)">Confirm</button>
+            </form>
+        </div>
+        <div class="form-container" id="step3">
+            <form action="forgot.php" method="post">
+                <h1>Recover</h1>
+                <p>Enter a new password:</p>
+                <input type="password" placeholder="New password" name="new_password">
+                <p>Confirm new password:</p>
+                <input type="password" placeholder="Confirm password" name="confirm_password">
+                <button>Change password</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        const step1 = document.getElementById("step1");
+        const step2 = document.getElementById("step2");
+        const step3 = document.getElementById("step3");
+        function step(step) {
+            switch (step) {
+                case 1:
+                    step2.style.display = "none";
+                    step3.style.display = "none";
+                    break;
+                case 2:
+                    step1.style.display = "none";
+                    step3.style.display = "none";
+                    break;
+                case 3:
+                    step1.style.display = "none";
+                    step2.style.display = "none";
+                    break;
+            }
+            document.cookie = "step=" + step;
+        }
+        function getCookie(name) {
+            let matches = document.cookie.match(new RegExp(
+                "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+            ));
+            return matches ? decodeURIComponent(matches[1]) : undefined;
+        }
+        let current_step = getCookie("step");
+        if (current_step !== undefined) current_step = parseInt(current_step);
+        step(current_step === undefined ? 1 : current_step);
+    </script>
+</body>
+
+</html>
