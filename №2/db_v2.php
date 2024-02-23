@@ -1,6 +1,7 @@
 <?php
 $datetime = new DateTime(timezone: new DateTimeZone("+0300"));
-class Db_2 {
+class Db
+{
     private $db;
     private $tables;
     private $have_datetime;
@@ -96,26 +97,35 @@ class Db_2 {
         $sql->execute();
         $this->db->commit();
     }
-    function delete(string $table, array $cond)
+    function delete(string $table, array $cond = [])
     {
         $this->db->beginTransaction();
-        $sql = "DELETE FROM " . $table . " WHERE ";
-        foreach ($cond as $key => $value) {
-            $sql .= $key . " == :" . $key . " AND ";
+        if (count($cond) > 0) {
+            $sql = "DELETE FROM " . $table . " WHERE ";
+            foreach ($cond as $key => $value) {
+                $sql .= $key . " == :" . $key . " AND ";
+            }
+            $sql = substr($sql, 0, -5);
+            $sql = $this->db->prepare($sql);
+            foreach ($cond as $key => $value) {
+                $sql->bindValue(":" . $key, $value);
+            }
+            $sql->execute();
+            $this->db->commit();
         }
-        $sql = substr($sql, 0, -5);
-        $sql = $this->db->prepare($sql);
-        foreach ($cond as $key => $value) {
-            $sql->bindValue(":" . $key, $value);
+        else {
+            $sql = "DELETE " . $table;
+            $sql = $this->db->prepare($sql);
+            $sql->execute();
+            $this->db->commit();
         }
-        $sql->execute();
-        $this->db->commit();
     }
-    function get(string $table, array $dst = [], array $cond = []) {
+    function get(string $table, array $dst = [], array $cond = [])
+    {
         $this->db->beginTransaction();
         $sql = "SELECT ";
         if (count($dst) > 0 && count($cond) > 0) {
-            echo "both != 0";
+            // echo "both != 0";
             foreach ($dst as $value) {
                 $sql .= $value . ", ";
             }
@@ -134,9 +144,8 @@ class Db_2 {
             $result = $sql->fetchAll();
             $this->db->commit();
             return $result;
-        }
-        else if (count($dst) > 0) {
-            echo "dst != 0";
+        } else if (count($dst) > 0) {
+            // echo "dst != 0";
             if (is_int(array_keys($dst)[0])) {
                 foreach ($dst as $value) {
                     $sql .= $value . ", ";
@@ -148,11 +157,9 @@ class Db_2 {
                 $result = $sql->fetchAll();
                 $this->db->commit();
                 return $result;
-            }
-            else return "Неверно задан второй параметр!";
-        }
-        else if (count($cond) > 0) {
-            echo "cond != 0";
+            } else return "Неверно задан второй параметр!";
+        } else if (count($cond) > 0) {
+            // echo "cond != 0";
             $sql .= "* FROM " . $table . " WHERE ";
             foreach ($cond as $key => $value) {
                 $sql .= $key . " == :" . $key . " AND ";
@@ -166,9 +173,8 @@ class Db_2 {
             $result = $sql->fetchAll();
             $this->db->commit();
             return $result;
-        }
-        else {
-            echo "both = 0";
+        } else {
+            // echo "both = 0";
             $sql .= "* FROM " . $table;
             $sql = $this->db->prepare($sql);
             $sql->execute();
@@ -177,7 +183,8 @@ class Db_2 {
             return $result;
         }
     }
-    function __construct(string $path) {
+    function __construct(string $path)
+    {
         if (!$this->db = new PDO("sqlite:" . $path)) $this->db->errorInfo();
     }
 }

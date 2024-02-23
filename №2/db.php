@@ -1,5 +1,9 @@
 <?php
 $datetime = new DateTime(timezone: new DateTimeZone("+0300"));
+/*
+    This is old version.
+    Please use new (_v2) version for better experience
+*/
 class Db
 {
     private $db;

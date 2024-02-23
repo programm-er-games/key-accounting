@@ -69,14 +69,28 @@
             ));
             return matches ? decodeURIComponent(matches[1]) : undefined;
         }
+        // console.log(document.cookie);
+        // let cookies = document.cookie.split(";");
+        // cookies.forEach((val) => {
+        //     console.log(val);
+        //     val = val.split("=");
+        //     console.log(val);
+        //     let temp = val[0].replace(/\s/g, '') + "=nrlvnt;max-age=-1";
+        //     console.log(temp);
+        //     document.cookie = temp;
+        // });
         let in_mes = getCookie("sign_in_res");
         let up_mes = getCookie("sign_up_res");
-        document.getElementById("sign_in_message").textContent = in_mes === undefined ? "None" : in_mes;
-        document.getElementById("sign_up_message").textContent = up_mes === undefined ? "None" : up_mes;
+        document.getElementById("sign_in_message").textContent = in_mes === undefined ? "" : in_mes;
+        document.getElementById("sign_up_message").textContent = up_mes === undefined ? "" : up_mes;
         // console.log(getCookie("step"));
-        if (getCookie("step") !== undefined) {
-            document.cookie = "step=1; Max-Age=0";
-            location.reload();
+        // if (getCookie("step") !== undefined) {
+        //     document.cookie = "step=1; Max-Age=0";
+        //     location.reload();
+        // }
+        if (up_mes != "Успешно!" && up_mes == "") {
+            document.getElementById("container").classList.add('active');
+            document.title = "Register";
         }
     </script>
     <script src="script.js"></script>

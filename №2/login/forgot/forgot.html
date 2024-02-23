@@ -5,17 +5,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="forgot.css">
     <title>Password recover</title>
 </head>
 
 <body>
+    <div class="header">
+        <div class="list" onclick="getBack()">
+            <h4>Вернуться</h4>
+        </div>
+    </div>
     <div class="container" id="container">
         <div class="form-container" id="step1">
             <form action="forgot.php" method="post">
                 <h1>Recover</h1>
                 <p>Use your email to recover your password. We will send verification code on your email</p>
                 <input type="text" placeholder="Email" name="recover_email">
+                <p id="step1_err"></p>
                 <button onclick="step(2)">Send code</button>
             </form>
         </div>
@@ -24,6 +30,7 @@
                 <h1>Recover</h1>
                 <p>Enter code which we sent on your email:</p>
                 <input type="text" placeholder="Code" name="check_code">
+                <p id="step2_err"></p>
                 <button onclick="step(3)">Confirm</button>
             </form>
         </div>
@@ -34,6 +41,7 @@
                 <input type="password" placeholder="New password" name="new_password">
                 <p>Confirm new password:</p>
                 <input type="password" placeholder="Confirm password" name="confirm_password">
+                <p id="step3_err"></p>
                 <button>Change password</button>
             </form>
         </div>
@@ -42,19 +50,25 @@
         const step1 = document.getElementById("step1");
         const step2 = document.getElementById("step2");
         const step3 = document.getElementById("step3");
+        const step1_err = document.getElementById("step1_err");
+        const step2_err = document.getElementById("step2_err");
+        const step3_err = document.getElementById("step3_err");
         function step(step) {
             switch (step) {
                 case 1:
-                    step2.style.display = "none";
-                    step3.style.display = "none";
+                    step1.style.zIndex = "3";
+                    step2.style.zIndex = "2";
+                    step3.style.zIndex = "1";
                     break;
                 case 2:
-                    step1.style.display = "none";
-                    step3.style.display = "none";
+                    step1.style.zIndex = "2";
+                    step2.style.zIndex = "3";
+                    step3.style.zIndex = "1";
                     break;
                 case 3:
-                    step1.style.display = "none";
-                    step2.style.display = "none";
+                    step1.style.zIndex = "1";
+                    step2.style.zIndex = "2";
+                    step3.style.zIndex = "3";
                     break;
             }
             document.cookie = "step=" + step;
@@ -65,10 +79,23 @@
             ));
             return matches ? decodeURIComponent(matches[1]) : undefined;
         }
+        function getBack() {
+            document.cookie = "step=1; Max-Age=1";
+            document.cookie = "recover_res=nrlvnt; Max-Age=0";
+            document.cookie = "code=nrlvnt; Max-Age=0";
+            document.cookie = "email=nrlvnt; Max-Age=0";
+            location.href = "../index.html";
+        }
+        let error = getCookie("recover_res");
+        if (error === undefined) error = "";
+        step1_err.textContent = error;
+        step2_err.textContent = error;
+        step3_err.textContent = error;
         let current_step = getCookie("step");
         if (current_step !== undefined) current_step = parseInt(current_step);
         step(current_step === undefined ? 1 : current_step);
     </script>
+
 </body>
 
 </html>
