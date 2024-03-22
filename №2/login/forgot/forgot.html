@@ -80,7 +80,7 @@
             return matches ? decodeURIComponent(matches[1]) : undefined;
         }
         function getBack() {
-            document.cookie = "step=1; Max-Age=1";
+            document.cookie = "step=1; Max-Age=1, path=/";
             document.cookie = "recover_res=nrlvnt; Max-Age=0";
             document.cookie = "code=nrlvnt; Max-Age=0";
             document.cookie = "email=nrlvnt; Max-Age=0";

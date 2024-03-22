@@ -25,12 +25,12 @@
             <table>
                 <thead>
                     <tr>
-                        <th> ID </th>
-                        <th> ФИО </th>
-                        <th> Ключ </th>
-                        <th> Выдача</th>
-                        <th> Сдача </th>
-                        <th> Статус </th>
+                        <th>ID</th>
+                        <th>ФИО</th>
+                        <th>Ключ</th>
+                        <th>Выдача</th>
+                        <th>Сдача</th>
+                        <th>Статус</th>
                     </tr>
                 </thead>
                 <tbody>

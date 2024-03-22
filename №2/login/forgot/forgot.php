@@ -24,7 +24,7 @@ if (isset($_POST["recover_email"])) {
             }
         }
         $message = "Your verification code: " . $code . ". It expires in 5 minutes.";
-        // $temp = $main_mail->send_mail($email, "Recover password on [eventregister]", $message);
+        $temp = $main_mail->send_mail($email, "Recover password on [eventregister]", $message);
         setcookie("recover_res", "Успешно!", time() + 120);
         setcookie("code", $code, time() + 360, "/");
         // setcookie("email", $email, time() + 360, "/");

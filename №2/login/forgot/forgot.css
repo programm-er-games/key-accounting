@@ -8,8 +8,11 @@
 }
 
 body {
-    background-color: #c9d6ff;
-    background: linear-gradient(to right, #e2e2e2, #c9d6ff);
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    background: #34495e;
+    box-sizing: border-box;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -26,13 +29,30 @@ body {
 
 .container input {
     background-color: #eee;
-    border: none;
-    margin: 8px 0;
-    padding: 10px 15px;
+    background: none;
+    border: 2px solid #3498db;
+    margin: 10px auto;
+    padding: 14px 10px;
     font-size: 13px;
-    border-radius: 8px;
-    width: 100%;
+    border-radius: 24px;
+    width: 200px;
     outline: none;
+    color: white;
+    text-align: center;
+    /* display: block; */
+    transition: 0.5s;
+}
+
+.container input:hover {
+    width: 240px;
+    border-color: #2ecc71;
+    background: rgba(52, 152, 219, 0.5);
+    color: white;
+}
+
+.container input:hover::placeholder {
+    color: white;
+    transition: 0.5s;
 }
 
 .header {
@@ -55,8 +75,16 @@ body {
     width: 100%;
 }
 
+.form-container button {
+    text-transform: none;
+}
+
+.form-container button:hover {
+    background: #2ecc71;
+}
+
 .container form {
-    background-color: #fff;
+    background-color: #191919;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -66,17 +94,22 @@ body {
 }
 
 .container button {
-    background-color: #512da8;
+    /* background-color: #512da8; */
+    background: none;
     color: #fff;
+    /* display: block; */
     font-size: 12px;
-    padding: 10px 45px;
-    border: 1px solid transparent;
-    border-radius: 8px;
+    padding: 14px 40px;
+    border: 2px solid #2ecc71;
+    border-radius: 24px;
+    outline: none;
     font-weight: 600;
     letter-spacing: 0.5px;
-    text-transform: uppercase;
-    margin-top: 10px;
+    text-align: center;
+    margin: 20px auto;
     cursor: pointer;
+    transition: 0.25s;
+    text-transform: uppercase;
 }
 
 .container a {
@@ -87,7 +120,7 @@ body {
 }
 
 #step1 {
-    z-index: 1;
+    z-index: 3;
 }
 
 #step2 {
@@ -95,7 +128,7 @@ body {
 }
 
 #step3 {
-    z-index: 3;
+    z-index: 1;
 }
 
 #step1_err, #step2_err, #step3_err{
@@ -104,18 +137,19 @@ body {
 }
 
 .container {
-    background-color: #fff;
+    background: #191919;
     border-radius: 30px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.35);
     position: relative;
     overflow: hidden;
     width: 768px;
     max-width: 100%;
     min-height: 480px;
+    color: white;
 }
 
 .header .list:hover h4 {
     color: #333;
     border-color: rgb(148, 148, 148);
-
+    cursor: pointer;
 }
