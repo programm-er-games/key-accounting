@@ -23,7 +23,7 @@ class Db
             $sql .= ")";
             $this->db->beginTransaction();
             $this->db->query($sql);
-            $this->db->commit();
+            return $this->db->commit();
         }
     }
     function insert(string $table, array $data)
@@ -35,14 +35,16 @@ class Db
         $data_keys = array_keys($data);
         if (is_int($data_keys[0])) {
             $sql .= " VALUES (";
-            array_push($data, $datetime->format("D, d M Y H:i:s"));
+            $this->have_datetime ? array_push($data, $datetime->format("D, d M Y H:i:s")) : null;
             for ($i = 0; $i < count($data); $i++) {
+                if (str_contains($data[$tables_keys[$i]], "AUTOINCREMENT")) continue;
                 $sql .= ":" . $tables_keys[$i] . ", ";
             }
             $sql = substr($sql, 0, -2);
             $sql .= ")";
             $sql = $this->db->prepare($sql);
             for ($i = 0; $i < count($data); $i++) {
+                if (str_contains($data[$tables_keys[$i]], "AUTOINCREMENT")) continue;
                 $sql->bindParam(":" . $tables_keys[$i], $data[$i]);
             }
             $sql->execute();
@@ -50,12 +52,14 @@ class Db
             if (!in_array("datetime", $data_keys) && $this->have_datetime) array_push($data_keys, "datetime");
             $sql .= "(";
             for ($i = 0; $i < count($data_keys); $i++) {
+                if (str_contains($data[$tables_keys[$i]], "AUTOINCREMENT")) continue;
                 if (in_array($data_keys[$i], $tables_keys, true))
                     $sql .= $data_keys[$i] . ", ";
             }
             $sql = substr($sql, 0, -2);
             $sql .= ") VALUES (";
             foreach ($data_keys as $value) {
+                if (str_contains($data[$tables_keys[$i]], "AUTOINCREMENT")) continue;
                 $sql .= ":" . $value . ", ";
             }
             $sql = substr($sql, 0, -2);
@@ -64,11 +68,12 @@ class Db
             $temp = array_keys($data);
             $sql = $this->db->prepare($sql);
             for ($i = 0; $i < count($data); $i++) {
+                if (str_contains($data[$tables_keys[$i]], "AUTOINCREMENT")) continue;
                 $sql->bindValue(":" . $data_keys[$i], $data[$temp[$i]]);
             }
             $sql->execute();
         }
-        $this->db->commit();
+        return $this->db->commit();
     }
     function update(string $table, array $upd, array $cond)
     {
@@ -95,7 +100,7 @@ class Db
             $sql->bindValue(":" . $key, $value);
         }
         $sql->execute();
-        $this->db->commit();
+        return $this->db->commit();
     }
     function delete(string $table, array $cond = [])
     {
@@ -111,13 +116,12 @@ class Db
                 $sql->bindValue(":" . $key, $value);
             }
             $sql->execute();
-            $this->db->commit();
-        }
-        else {
+            return $this->db->commit();
+        } else {
             $sql = "DELETE " . $table;
             $sql = $this->db->prepare($sql);
             $sql->execute();
-            $this->db->commit();
+            return $this->db->commit();
         }
     }
     function get(string $table, array $dst = [], array $cond = [])
@@ -157,7 +161,7 @@ class Db
                 $result = $sql->fetchAll();
                 $this->db->commit();
                 return $result;
-            } else return "Неверно задан второй параметр!";
+            } else throw new Exception("Неверно задан второй параметр!", 1);
         } else if (count($cond) > 0) {
             // echo "cond != 0";
             $sql .= "* FROM " . $table . " WHERE ";
@@ -182,6 +186,29 @@ class Db
             $this->db->commit();
             return $result;
         }
+    }
+    function _get_tables()
+    {
+        return array_keys($this->tables);
+    }
+    function _get_rows(string $table = "")
+    {
+        if ($table) return array_keys($this->tables[$table]);
+        else {
+            $result = [];
+            foreach (array_keys($this->tables) as $table) {
+                $result[$table] = [];
+                foreach (array_keys($this->tables[$table]) as $row) {
+                    array_push($result[$table], $row);
+                }
+            }
+            return $result;
+        }
+    }
+    function _get_properties(string $table, string $row = "")
+    {
+        if ($row) return $this->tables[$table][$row];
+        else return $this->tables[$table];
     }
     function __construct(string $path)
     {

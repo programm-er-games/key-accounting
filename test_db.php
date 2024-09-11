@@ -28,7 +28,7 @@
     // // var_dump($test->get("student_records", ["name" => "Alex", "surname" => "Pop"]));
     // $test->delete"student_records", ["surname"=> "Popov"]);
     require "№2/db_v2.php";
-    $test = new Db_2("C:\\Windows.old\\Users\\User\\Documents\\GitHub\\key-accounting\\KA.db");
+    $test = new Db("C:\\Windows.old\\Users\\User\\Documents\\GitHub\\key-accounting\\KA.db");
     $test->start(["test" => ["name" => "TEXT NOT NULL", "surname" => "TEXT NOT NULL"]], true);
     // $test->insert("test", ["name" => "asd", "surname" => "rty"]);
     // $test->update("test", ["name" => "пидор"], ["surname" => "qwe"]);
